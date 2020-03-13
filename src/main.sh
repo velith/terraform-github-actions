@@ -61,6 +61,11 @@ function parseInputs {
   if [ -n "${TF_WORKSPACE}" ]; then
     tfWorkspace="${TF_WORKSPACE}"
   fi
+
+  if [ -n "${GCP_SA_KEY}" ]; then
+    echo "${GCP_SA_KEY}" | base64 -d > /opt/gcp_key.json
+    export GOOGLE_APPLICATION_CREDENTIALS=/opt/gcp_key.json
+  fi
 }
 
 function configureCLICredentials {
@@ -115,6 +120,8 @@ function main {
   source ${scriptDir}/terraform_import.sh
   source ${scriptDir}/terraform_taint.sh
   source ${scriptDir}/terraform_destroy.sh
+
+  
 
   parseInputs
   configureCLICredentials
